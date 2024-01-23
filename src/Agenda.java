@@ -16,7 +16,9 @@ public class Agenda {
                     ##################
                     """);
             System.out.println(">>>> Contatos <<<<");
+            exibirContatos();
 
+            System.out.println();
             System.out.println(">>>> Menu <<<<");
             System.out.println("1 - Adicionar Contato");
             System.out.println("2 - Remover Contato");
@@ -26,12 +28,22 @@ public class Agenda {
             entrada = scanner.nextInt();
             if (entrada == 1) {
                 adicionarContato();
+            } else if (entrada == 4) {
+                break;
             }
 
         }
         scanner.close();
     }
 
+    private static void exibirContatos() {
+        System.out.println("ID | Nome");
+        for (int i = 0; i < contatos.size(); i++) {
+            Contato contato = contatos.get(i);
+            System.out.printf("%d | %s\n",contato.getId(),contato.getNomeCompleto());
+
+        }
+    }
     private static void adicionarContato() {
         Scanner scanner = new Scanner(System.in);
 
@@ -39,6 +51,9 @@ public class Agenda {
         novoContato.setId(gerarNovoIdContato());
         editarNomeContato(novoContato);
         editarSobrenomeContato(novoContato);
+//        adicionarTelefone(novoContato);
+
+        contatos.add(novoContato);
     }
 
     private static Long gerarNovoIdContato() {
@@ -51,7 +66,7 @@ public class Agenda {
 
     private static void editarNomeContato(Contato contato) {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("DDigite o nome do contato: ");
+        System.out.println("Digite o nome do contato: ");
         String nomeContato = scanner.next();
         contato.setNome(nomeContato);
     }
@@ -61,5 +76,30 @@ public class Agenda {
         System.out.println("Digite o sobrenome do contato: ");
         String sobrenomeContato = scanner.next();
         contato.setSobrenome(sobrenomeContato);
+    }
+
+//    private static void adicionarTelefone(Contato contato) {
+//        Scanner scanner = new Scanner(System.in);
+//        Telefone novoTelefone = new Telefone();
+//
+//        try {
+//            System.out.println("Digite o DDD do contato: ");
+//            String dddContato = scanner.next();
+//            System.out.println("Digite o telefone do contato: ");
+//            Long telefoneContato = scanner.nextLong();
+//
+//            novoTelefone.setId(gerarNovoIdTelefone(contato));
+//            novoTelefone.setDdd();
+//        }
+//    }
+
+    private static Long gerarNovoIdTelefone(Contato contato) {
+        List<Telefone> listaTelefonesDoContato = contato.getTelefones();
+        System.out.println(listaTelefonesDoContato);
+        if (listaTelefonesDoContato.size() == 0) {
+            return 1L;
+        }
+        Long ultimoTelefoneID = listaTelefonesDoContato.get(listaTelefonesDoContato.size()-1).getId();
+        return (ultimoTelefoneID+1);
     }
 }
