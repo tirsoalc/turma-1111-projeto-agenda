@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -8,7 +9,7 @@ public class Agenda {
     private static List<Contato> contatos = new ArrayList<>();
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        int entrada = 0;
+        int entrada;
         while (true) {
             System.out.println("""
                     ##################
@@ -45,13 +46,12 @@ public class Agenda {
         }
     }
     private static void adicionarContato() {
-        Scanner scanner = new Scanner(System.in);
 
         Contato novoContato = new Contato();
         novoContato.setId(gerarNovoIdContato());
         editarNomeContato(novoContato);
         editarSobrenomeContato(novoContato);
-//        adicionarTelefone(novoContato);
+        adicionarTelefone(novoContato);
 
         contatos.add(novoContato);
     }
@@ -78,28 +78,50 @@ public class Agenda {
         contato.setSobrenome(sobrenomeContato);
     }
 
-//    private static void adicionarTelefone(Contato contato) {
-//        Scanner scanner = new Scanner(System.in);
-//        Telefone novoTelefone = new Telefone();
-//
-//        try {
-//            System.out.println("Digite o DDD do contato: ");
-//            String dddContato = scanner.next();
-//            System.out.println("Digite o telefone do contato: ");
-//            Long telefoneContato = scanner.nextLong();
-//
-//            novoTelefone.setId(gerarNovoIdTelefone(contato));
-//            novoTelefone.setDdd();
-//        }
-//    }
+    private static void adicionarTelefone(Contato contato) {
+        Scanner scanner = new Scanner(System.in);
+        Telefone novoTelefone = new Telefone();
+
+        try {
+            System.out.println("Digite o DDD do contato: ");
+            String dddContato = scanner.next();
+            System.out.println("Digite o telefone do contato: ");
+            Long telefoneContato = scanner.nextLong();
+
+            novoTelefone.setId(gerarNovoIdTelefone(contato));
+            novoTelefone.setDdd(dddContato);
+            novoTelefone.setNumero(telefoneContato);
+        } catch (InputMismatchException e) {
+            System.out.println("Erro. Por favor verifique as informações e edite o contato.");
+        }
+
+        if (telefoneDuplicado(novoTelefone)) {
+            System.out.println("Telefone duplicado. por favor edite o contato e insira um novo telefone.");
+        } else {
+            contato.getTelefones().add(novoTelefone);
+        }
+    }
 
     private static Long gerarNovoIdTelefone(Contato contato) {
         List<Telefone> listaTelefonesDoContato = contato.getTelefones();
-        System.out.println(listaTelefonesDoContato);
+
         if (listaTelefonesDoContato.size() == 0) {
             return 1L;
         }
         Long ultimoTelefoneID = listaTelefonesDoContato.get(listaTelefonesDoContato.size()-1).getId();
         return (ultimoTelefoneID+1);
+    }
+
+    private static boolean telefoneDuplicado(Telefone novoTelefone) {
+        for (int i = 0; i < contatos.size(); i++) {
+            List<Telefone> contatoAtualTelefones = contatos.get(i).getTelefones();
+            for (int j=0; j< contatoAtualTelefones.size(); j++) {
+                if (novoTelefone.getNumero().equals(contatoAtualTelefones.get(j).getNumero()) &&
+                    novoTelefone.getDdd().equals(contatoAtualTelefones.get(j).getDdd())) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

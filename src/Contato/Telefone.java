@@ -13,4 +13,9 @@ public class Telefone {
 
     public void setNumero(Long numero) {this.numero = numero;}
     public Long getNumero() {return numero;}
+
+    @Override
+    public String toString() {
+        return String.format("{\"id\": %d, \"ddd\": \"%s\", \"numero\": %d}", id, ddd, numero);
+    }
 }
