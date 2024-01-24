@@ -18,4 +18,9 @@ public class Contato {
     public String getNomeCompleto() {return nome + " " + sobrenome;}
 
     public List<Telefone> getTelefones() {return telefones;}
+
+    @Override
+    public String toString() {
+        return String.format("{\"id\": %d, \"nome\":\"%s\", \"sobrenome\": \"%s\", \"telefones\": %s}",id,nome,sobrenome,telefones);
+    }
 }

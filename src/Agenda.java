@@ -4,7 +4,8 @@ import java.util.List;
 import java.util.Scanner;
 
 import Contato.*;
-import Utilitarios.BuscaBinariaContato;
+import Utilitarios.BuscaBinaria;
+import Utilitarios.BuscaLinear;
 
 public class Agenda {
     private static List<Contato> contatos = new ArrayList<>();
@@ -33,10 +34,12 @@ public class Agenda {
             } else if (entrada == 2) {
                 System.out.println(removerContato());
             } else if (entrada == 3){
-
+                System.out.println(editarContato());
             } else if (entrada == 4) {
+                System.out.println("Encerrando.");
                 break;
             }
+
 
         }
         scanner.close();
@@ -136,7 +139,7 @@ public class Agenda {
         System.out.println("Informe o ID do contato que será removido: ");
         Long idContatoRemovido = scanner.nextLong();
 
-        BuscaBinariaContato buscaBinaria = new BuscaBinariaContato();
+        BuscaBinaria buscaBinaria = new BuscaBinaria();
         Contato contatoRemovido = buscaBinaria.buscaContato(idContatoRemovido, contatos);
 
         if (contatoRemovido != null) {
@@ -144,6 +147,85 @@ public class Agenda {
             return "Contato removido.";
         }
         return "Contato não encontrado.";
+    }
 
+    private static String editarContato() {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Por favor informe o ID do contato que deseja alterar alguma informação");
+        Long idContatoAlterarado = scanner.nextLong();
+
+        BuscaBinaria buscaBinaria = new BuscaBinaria();
+        Contato contatoAlterado = buscaBinaria.buscaContato(idContatoAlterarado, contatos);
+
+        if (contatoAlterado != null){
+            exibirMenuEditarContato();
+            int opcao = scanner.nextInt();
+            if (opcao == 1) {
+                editarNomeContato(contatoAlterado);
+                return "Nome do contato alterado.";
+            } else if (opcao == 2) {
+                editarSobrenomeContato(contatoAlterado);
+                return "Sobrenome do contato alterado.";
+            } else if (opcao == 3) {
+                return editarTelefoneContato(contatoAlterado);
+            } else {
+                return "Opção Inválida.";
+            }
+        } else {
+            return "Contato não encontrado";
+        }
+    }
+
+    private static void exibirMenuEditarContato() {
+        System.out.println("O que você deseja alterar no contato? Digite o número da opção: ");
+        System.out.println("1 - Nome");
+        System.out.println("2 - Sobrenome");
+        System.out.println("3 - Telefone");
+    }
+
+    private static String editarTelefoneContato(Contato contato) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Você deseja adicionar ou alterar um telefone?");
+        System.out.println("1 - Adicionar");
+        System.out.println("2 - Alterar");
+        int opcao = scanner.nextInt();
+
+
+        if (opcao == 1) {
+            adicionarTelefone(contato);
+            return "Telefone adicionado a lista de telefones do contato";
+        } else if (opcao == 2) {
+            System.out.println("Digite o ID do telefone a ser alterado: ");
+            Long idTelefoneAlterado = scanner.nextLong();
+            BuscaLinear buscaLinear = new BuscaLinear();
+            Telefone telefoneParaSerAlterado = buscaLinear.buscaTelefone(idTelefoneAlterado, contato.getTelefones());
+            Telefone novoTelefone = new Telefone();
+            novoTelefone.setId(telefoneParaSerAlterado.getId());
+
+            if (telefoneParaSerAlterado != null) {
+                try {
+                    System.out.println("Digite o novo DDD do contato: ");
+                    String dddContato = scanner.next();
+                    System.out.println("Digite o novo número do contato");
+                    Long telefoneContato = scanner.nextLong();
+                    novoTelefone.setDdd(dddContato);
+                    novoTelefone.setNumero(telefoneContato);
+                } catch (InputMismatchException e) {
+                    return "Erro. Por favor verifique as informações e refaça o procedimento";
+                }
+
+                if (telefoneDuplicado(novoTelefone)) {
+                    return "Telefone duplicado. Por favor verfique as informações e refaça o procedimento";
+                } else {
+                    telefoneParaSerAlterado.setDdd(novoTelefone.getDdd());
+                    telefoneParaSerAlterado.setNumero(novoTelefone.getNumero());
+                    return "O telefone do contato foi modificado.";
+                }
+            }
+            return "Telefone não encontrado";
+        } else {
+            return "Opção Inválida";
+        }
     }
 }

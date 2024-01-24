@@ -5,7 +5,7 @@ import Contato.Contato;
 import java.util.List;
 
 
-public class BuscaBinariaContato {
+public class BuscaBinaria {
     public Contato buscaContato(Long id, List<Contato> contatos) {
         if (contatos.size() == 0) {
             return null;
