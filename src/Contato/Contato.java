@@ -19,8 +19,22 @@ public class Contato {
 
     public List<Telefone> getTelefones() {return telefones;}
 
-    @Override
-    public String toString() {
-        return String.format("{\"id\": %d, \"nome\":\"%s\", \"sobrenome\": \"%s\", \"telefones\": %s}",id,nome,sobrenome,telefones);
+
+    public String contatosFormatados() {
+        return String.format("{\"id\": %d, \"nome\":\"%s\", \"sobrenome\": \"%s\", \"telefones\": [%s]}",id,nome,sobrenome,telefonesFormatados());
     }
+
+    public String telefonesFormatados() {
+        String resultado = "";
+        for (int i = 0; i < telefones.size(); i++){
+            if (i == telefones.size()-1) {
+                resultado += telefones.get(i).telefoneFormatado();
+            } else {
+                resultado += telefones.get(i).telefoneFormatado() + ", ";
+            }
+        }
+        return resultado;
+    }
+
+    //Refatorar o código de maneira que a string formatada não venha do toString e também receba o telefone formatado.
 }
