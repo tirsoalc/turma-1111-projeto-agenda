@@ -188,8 +188,9 @@ public class Agenda {
         System.out.println("Você deseja adicionar ou alterar um telefone?");
         System.out.println("1 - Adicionar");
         System.out.println("2 - Alterar");
+        System.out.println("3 - Remover");
         int opcao = scanner.nextInt();
-
+        System.out.println(mostrarListaDeTelefones(contato));
 
         if (opcao == 1) {
             adicionarTelefone(contato);
@@ -200,10 +201,11 @@ public class Agenda {
             BuscaLinear buscaLinear = new BuscaLinear();
             Telefone telefoneParaSerAlterado = buscaLinear.buscaTelefone(idTelefoneAlterado, contato.getTelefones());
             Telefone novoTelefone = new Telefone();
-            novoTelefone.setId(telefoneParaSerAlterado.getId());
+
 
             if (telefoneParaSerAlterado != null) {
                 try {
+                    novoTelefone.setId(telefoneParaSerAlterado.getId());
                     System.out.println("Digite o novo DDD do contato: ");
                     String dddContato = scanner.next();
                     System.out.println("Digite o novo número do contato");
@@ -223,8 +225,28 @@ public class Agenda {
                 }
             }
             return "Telefone não encontrado";
+        } else if (opcao == 3) {
+            System.out.println("Digite o ID do telefone que será removido: ");
+            Long idTelefoneParaSerRemovido = scanner.nextLong();
+            BuscaLinear buscaLinear = new BuscaLinear();
+            Telefone telefoneParaSerRemovido = buscaLinear.buscaTelefone(idTelefoneParaSerRemovido, contato.getTelefones());
+            if (telefoneParaSerRemovido != null) {
+                contato.getTelefones().remove(telefoneParaSerRemovido);
+                return "Telefone removido.";
+            }
+            return "Telefone não encontrado";
         } else {
             return "Opção Inválida";
         }
+    }
+
+    private static String mostrarListaDeTelefones(Contato contato) {
+        List<Telefone> telefones = contato.getTelefones();
+        String stringRetorno = "";
+        stringRetorno += "ID | DDD + Número\n";
+        for(int i = 0; i < telefones.size(); i++) {
+            stringRetorno += telefones.get(i).telefoneFormatado() + "\n";
+        }
+        return stringRetorno;
     }
 }

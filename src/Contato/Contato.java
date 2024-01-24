@@ -20,21 +20,20 @@ public class Contato {
     public List<Telefone> getTelefones() {return telefones;}
 
 
-    public String contatosFormatados() {
-        return String.format("{\"id\": %d, \"nome\":\"%s\", \"sobrenome\": \"%s\", \"telefones\": [%s]}",id,nome,sobrenome,telefonesFormatados());
+    public String contatosFormatadosJSON() {
+        return String.format("{\"id\": %d, \"nome\":\"%s\", \"sobrenome\": \"%s\", \"telefones\": [%s]}",id,nome,sobrenome,listaTelefonesFormatadosJSON());
     }
 
-    public String telefonesFormatados() {
+    public String listaTelefonesFormatadosJSON() {
         String resultado = "";
         for (int i = 0; i < telefones.size(); i++){
             if (i == telefones.size()-1) {
-                resultado += telefones.get(i).telefoneFormatado();
+                resultado += telefones.get(i).telefoneFormatadoJSON();
             } else {
-                resultado += telefones.get(i).telefoneFormatado() + ", ";
+                resultado += telefones.get(i).telefoneFormatadoJSON() + ", ";
             }
         }
         return resultado;
     }
 
-    //Refatorar o código de maneira que a string formatada não venha do toString e também receba o telefone formatado.
 }

@@ -17,6 +17,10 @@ public class Telefone {
 
 
     public String telefoneFormatado() {
+        return String.format("%d | %s %d", id, ddd, numero);
+    }
+
+    public String telefoneFormatadoJSON() {
         return String.format("{\"id\": %d, \"ddd\": \"%s\", \"numero\": %d}", id, ddd, numero);
     }
 }
