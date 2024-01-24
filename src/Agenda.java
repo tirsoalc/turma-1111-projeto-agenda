@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import Contato.*;
+import Utilitarios.BuscaBinariaContato;
 
 public class Agenda {
     private static List<Contato> contatos = new ArrayList<>();
@@ -29,6 +30,10 @@ public class Agenda {
             entrada = scanner.nextInt();
             if (entrada == 1) {
                 adicionarContato();
+            } else if (entrada == 2) {
+                System.out.println(removerContato());
+            } else if (entrada == 3){
+
             } else if (entrada == 4) {
                 break;
             }
@@ -123,5 +128,22 @@ public class Agenda {
             }
         }
         return false;
+    }
+
+    private static String removerContato() {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Informe o ID do contato que será removido: ");
+        Long idContatoRemovido = scanner.nextLong();
+
+        BuscaBinariaContato buscaBinaria = new BuscaBinariaContato();
+        Contato contatoRemovido = buscaBinaria.buscaContato(idContatoRemovido, contatos);
+
+        if (contatoRemovido != null) {
+            contatos.remove(contatoRemovido);
+            return "Contato removido.";
+        }
+        return "Contato não encontrado.";
+
     }
 }
