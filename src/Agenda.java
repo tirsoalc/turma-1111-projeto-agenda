@@ -4,13 +4,17 @@ import java.util.List;
 import java.util.Scanner;
 
 import Contato.*;
-import Utilitarios.BuscaBinaria;
-import Utilitarios.BuscaLinear;
+import Utilitarios.*;
+
 
 public class Agenda {
     private static List<Contato> contatos = new ArrayList<>();
+    private static Scanner scanner = new Scanner(System.in);
+    private static BuscaLinear buscaLinear = new BuscaLinear();
+    private static BuscaBinaria buscaBinaria = new BuscaBinaria();
+    private static FormatadorJSON FormatadorJSON = new FormatadorJSON();
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
+
         int entrada;
         while (true) {
             System.out.println("""
@@ -26,7 +30,8 @@ public class Agenda {
             System.out.println("1 - Adicionar Contato");
             System.out.println("2 - Remover Contato");
             System.out.println("3 - Editar Contato");
-            System.out.println("4 - Sair");
+            System.out.println("4 - Mostrar Lista De Telefones Do Contato");
+            System.out.println("5 - Sair");
 
             entrada = scanner.nextInt();
             if (entrada == 1) {
@@ -36,11 +41,13 @@ public class Agenda {
             } else if (entrada == 3){
                 System.out.println(editarContato());
             } else if (entrada == 4) {
+                System.out.println(mostrarListaDeTelefones());
+            } else if (entrada == 5) {
                 System.out.println("Encerrando.");
                 break;
             }
-
         }
+        
         scanner.close();
     }
 
@@ -72,21 +79,21 @@ public class Agenda {
     }
 
     private static void editarNomeContato(Contato contato) {
-        Scanner scanner = new Scanner(System.in);
+
         System.out.println("Digite o nome do contato: ");
         String nomeContato = scanner.next();
         contato.setNome(nomeContato);
     }
 
     private static void editarSobrenomeContato(Contato contato) {
-        Scanner scanner = new Scanner(System.in);
+
         System.out.println("Digite o sobrenome do contato: ");
         String sobrenomeContato = scanner.next();
         contato.setSobrenome(sobrenomeContato);
     }
 
     private static void adicionarTelefone(Contato contato) {
-        Scanner scanner = new Scanner(System.in);
+
         Telefone novoTelefone = new Telefone();
 
         try {
@@ -133,12 +140,9 @@ public class Agenda {
     }
 
     private static String removerContato() {
-        Scanner scanner = new Scanner(System.in);
-
         System.out.println("Informe o ID do contato que será removido: ");
         Long idContatoRemovido = scanner.nextLong();
 
-        BuscaBinaria buscaBinaria = new BuscaBinaria();
         Contato contatoRemovido = buscaBinaria.buscaContato(idContatoRemovido, contatos);
 
         if (contatoRemovido != null) {
@@ -149,15 +153,13 @@ public class Agenda {
     }
 
     private static String editarContato() {
-        Scanner scanner = new Scanner(System.in);
-
-        System.out.println("Por favor informe o ID do contato que deseja alterar alguma informação");
+                System.out.println("Por favor informe o ID do contato que deseja alterar alguma informação");
         Long idContatoAlterarado = scanner.nextLong();
 
-        BuscaBinaria buscaBinaria = new BuscaBinaria();
         Contato contatoAlterado = buscaBinaria.buscaContato(idContatoAlterarado, contatos);
 
         if (contatoAlterado != null){
+            System.out.println("Contato Atual: " + contatoAlterado.getNomeCompleto());
             exibirMenuEditarContato();
             int opcao = scanner.nextInt();
             if (opcao == 1) {
@@ -184,7 +186,7 @@ public class Agenda {
     }
 
     private static String editarTelefoneContato(Contato contato) {
-        Scanner scanner = new Scanner(System.in);
+
         System.out.println("Você deseja adicionar ou alterar um telefone?");
         System.out.println("1 - Adicionar");
         System.out.println("2 - Alterar");
@@ -198,7 +200,6 @@ public class Agenda {
         } else if (opcao == 2) {
             System.out.println("Digite o ID do telefone a ser alterado: ");
             Long idTelefoneAlterado = scanner.nextLong();
-            BuscaLinear buscaLinear = new BuscaLinear();
             Telefone telefoneParaSerAlterado = buscaLinear.buscaTelefone(idTelefoneAlterado, contato.getTelefones());
             Telefone novoTelefone = new Telefone();
 
@@ -228,7 +229,6 @@ public class Agenda {
         } else if (opcao == 3) {
             System.out.println("Digite o ID do telefone que será removido: ");
             Long idTelefoneParaSerRemovido = scanner.nextLong();
-            BuscaLinear buscaLinear = new BuscaLinear();
             Telefone telefoneParaSerRemovido = buscaLinear.buscaTelefone(idTelefoneParaSerRemovido, contato.getTelefones());
             if (telefoneParaSerRemovido != null) {
                 contato.getTelefones().remove(telefoneParaSerRemovido);
@@ -242,11 +242,27 @@ public class Agenda {
 
     private static String mostrarListaDeTelefones(Contato contato) {
         List<Telefone> telefones = contato.getTelefones();
+        if (telefones.size() == 0) {
+            return "Lista de telefones vazia";
+        }
         String stringRetorno = "";
-        stringRetorno += "ID | DDD + Número\n";
+        stringRetorno += "Contato: " + contato.getNomeCompleto();
+        stringRetorno += "\nID | DDD + Número\n";
         for(int i = 0; i < telefones.size(); i++) {
             stringRetorno += telefones.get(i).telefoneFormatado() + "\n";
         }
         return stringRetorno;
     }
+
+    private static String mostrarListaDeTelefones() {
+        System.out.println("Digite o ID do contato para ver a lista de telefones: ");
+        Long contatoId = scanner.nextLong();
+        Contato contatoAtual = buscaBinaria.buscaContato(contatoId, contatos);
+        if (contatoAtual != null) {
+            return mostrarListaDeTelefones(contatoAtual);
+        }
+        return "Contato não encontrado.";
+
+    }
+
 }

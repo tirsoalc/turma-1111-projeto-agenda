@@ -5,6 +5,8 @@ public class Telefone {
     private String ddd;
     private Long numero;
 
+    //Refatorar Getters/Setters, verificar a necessidade de alguns e criar o constructor com os parâmetros
+
     public void setId(Long id) {this.id = id;}
     public Long getId() {return id;}
 
@@ -21,6 +23,13 @@ public class Telefone {
     }
 
     public String telefoneFormatadoJSON() {
-        return String.format("{\"id\": %d, \"ddd\": \"%s\", \"numero\": %d}", id, ddd, numero);
+        return String.format("   {\n" +
+                "    " +
+                "\"id\": %d,\n" +
+                "    " +
+                "\"ddd\": \"%s\",\n" +
+                "    " +
+                "\"numero\": %d\n" +
+                "   }", id, ddd, numero);
     }
 }
