@@ -3,12 +3,21 @@ import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
+import Arquivo.Escritor;
+import Arquivo.Leitor;
 import Contato.*;
 import Utilitarios.BuscaBinaria;
 import Utilitarios.BuscaLinear;
 
 public class Agenda {
-    private static List<Contato> contatos = new ArrayList<>();
+
+    private static Leitor leitor = new Leitor();
+    private static List<Contato> contatos = leitor.listaDeContatos();
+    private static Scanner scanner = new Scanner(System.in);
+    private static BuscaLinear buscaLinear = new BuscaLinear();
+    private static BuscaBinaria buscaBinaria = new BuscaBinaria();
+    private static Escritor escritor = new Escritor();
+
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         int entrada;
@@ -61,6 +70,7 @@ public class Agenda {
         adicionarTelefone(novoContato);
 
         contatos.add(novoContato);
+        escritor.escreverArquivoContatos(novoContato.contatoFormatadoTxt());
     }
 
     private static Long gerarNovoIdContato() {

@@ -5,6 +5,15 @@ public class Telefone {
     private String ddd;
     private Long numero;
 
+    public Telefone(){}
+
+    public Telefone(Long id, String ddd, Long numero) {
+        this.id = id;
+        this.ddd = ddd;
+        this.numero = numero;
+    }
+
+
     public void setId(Long id) {this.id = id;}
     public Long getId() {return id;}
 
@@ -17,6 +26,22 @@ public class Telefone {
 
 
     public String telefoneFormatado() {
-        return String.format("{\"id\": %d, \"ddd\": \"%s\", \"numero\": %d}", id, ddd, numero);
+        return String.format("%d | %s %d", id, ddd, numero);
+    }
+
+    public String telefoneFormatadoTxt() {
+        return String.format("%d|%s|%d",id,ddd,numero);
+    }
+
+    public String telefoneFormatadoJSON() {
+        return String.format("   {\n" +
+                "    " +
+                "\"id\": %d,\n" +
+                "    " +
+                "\"ddd\": \"%s\",\n" +
+                "    " +
+                "\"numero\": %d\n" +
+                "   }", id, ddd, numero);
+
     }
 }
