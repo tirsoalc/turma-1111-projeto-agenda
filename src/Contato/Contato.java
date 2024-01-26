@@ -9,7 +9,15 @@ public class Contato {
     private String sobrenome;
     private List<Telefone> telefones = new ArrayList<>();
 
-    //Refatorar Getters/Setters, verificar a necessidade de alguns e criar o constructor com os parâmetros
+
+    public Contato () {}
+
+    public Contato (Long id,String nome,String sobrenome) {
+        this.id = id;
+        this.nome = nome;
+        this.sobrenome = sobrenome;
+    }
+
 
     public void setId(Long id) {this.id = id;}
     public Long getId() {return id;}
@@ -21,21 +29,10 @@ public class Contato {
 
     public List<Telefone> getTelefones() {return telefones;}
 
-
-    public String contatosFormatadosJSON() {
-        return String.format(" {\n  \"id\": %d,\n  \"nome\":\"%s\",\n  \"sobrenome\": \"%s\",\n  \"telefones\": [\n%s\n  ]\n }",id,nome,sobrenome,listaTelefonesFormatadosJSON());
+    public String contatoFormatadoTxt() {
+        return String.format("%d|%s|%s",id,nome,sobrenome);
     }
 
-    public String listaTelefonesFormatadosJSON() {
-        String resultado = "";
-        for (int i = 0; i < telefones.size(); i++){
-            if (i == telefones.size()-1) {
-                resultado += telefones.get(i).telefoneFormatadoJSON();
-            } else {
-                resultado += telefones.get(i).telefoneFormatadoJSON() + ",\n";
-            }
-        }
-        return resultado;
-    }
+
 
 }
