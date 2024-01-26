@@ -1,4 +1,3 @@
-import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
@@ -74,7 +73,7 @@ public class Agenda {
         adicionarTelefone(novoContato);
 
         contatos.add(novoContato);
-        escritor.escreverArquivoContatos(novoContato.contatoFormatadoTxt());
+        escritor.adicionarArquivoContatos(novoContato.contatoFormatadoTxt());
     }
 
     private static Long gerarNovoIdContato() {
@@ -90,6 +89,7 @@ public class Agenda {
         System.out.println("Digite o nome do contato: ");
         String nomeContato = scanner.next();
         contato.setNome(nomeContato);
+        escritor.atualizarContatos(contatos);
     }
 
     private static void editarSobrenomeContato(Contato contato) {
@@ -97,6 +97,7 @@ public class Agenda {
         System.out.println("Digite o sobrenome do contato: ");
         String sobrenomeContato = scanner.next();
         contato.setSobrenome(sobrenomeContato);
+        escritor.atualizarContatos(contatos);
     }
 
     private static void adicionarTelefone(Contato contato) {
@@ -120,6 +121,8 @@ public class Agenda {
             System.out.println("Telefone duplicado. por favor edite o contato e insira um novo telefone.");
         } else {
             contato.getTelefones().add(novoTelefone);
+            String telefoneString = String.format("%d|%s", contato.getId(), novoTelefone.telefoneFormatadoTxt());
+            escritor.adicionarArquivoTelefones(telefoneString);
         }
     }
 
@@ -154,6 +157,7 @@ public class Agenda {
 
         if (contatoRemovido != null) {
             contatos.remove(contatoRemovido);
+            escritor.atualizarContatosETelefones(contatos);
             return "Contato removido.";
         }
         return "Contato não encontrado.";
@@ -229,6 +233,7 @@ public class Agenda {
                 } else {
                     telefoneParaSerAlterado.setDdd(novoTelefone.getDdd());
                     telefoneParaSerAlterado.setNumero(novoTelefone.getNumero());
+                    escritor.atualizarTelefones(contatos);
                     return "O telefone do contato foi modificado.";
                 }
             }
@@ -239,6 +244,7 @@ public class Agenda {
             Telefone telefoneParaSerRemovido = buscaLinear.buscaTelefone(idTelefoneParaSerRemovido, contato.getTelefones());
             if (telefoneParaSerRemovido != null) {
                 contato.getTelefones().remove(telefoneParaSerRemovido);
+                escritor.atualizarTelefones(contatos);
                 return "Telefone removido.";
             }
             return "Telefone não encontrado";

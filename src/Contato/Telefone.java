@@ -14,7 +14,6 @@ public class Telefone {
         this.numero = numero;
     }
 
-
     public void setId(Long id) {this.id = id;}
     public Long getId() {return id;}
 
@@ -23,8 +22,6 @@ public class Telefone {
 
     public void setNumero(Long numero) {this.numero = numero;}
     public Long getNumero() {return numero;}
-
-
 
     public String telefoneFormatado() {
         return String.format("%d | %s %d", id, ddd, numero);

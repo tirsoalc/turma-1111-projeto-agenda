@@ -24,45 +24,61 @@ public class Escritor {
         }
     }
 
-//    public void escreverArquivos(List<Contato> contatos) {
-//
-//
-//        for (int i = 0; i < contatos.size(); i++) {
-//            Contato contatoAtual = contatos.get(i);
-//            String contatoString = contatoAtual.contatoFormatadoTxt();
-//            escreverArquivoContatos(contatosTxt, contatoString);
-//
-//            for (int j = 0; j < contatoAtual.getTelefones().size(); j++) {
-//                Telefone telefoneAtual = contatoAtual.getTelefones().get(j);
-//                String telefoneString= String.format("%d|%s",
-//                        contatoAtual.getId(),
-//                        telefoneAtual.telefoneFormatadoTxt()
-//                        );
-//
-//                escreverArquivoTelefones(telefonesTxt, telefoneString);
-//            }
-//        }
-//    }
-    public void escreverArquivoTelefones(String telefoneString) {
+    public void atualizarContatosETelefones(List<Contato> contatos) {
+        atualizarContatos(contatos);
+        atualizarTelefones(contatos);
+    }
+    public void adicionarArquivoTelefones(String telefoneString) {
         criarArquivo(telefonesTxt);
         try {
             FileWriter fileWriter = new FileWriter(telefonesTxt, true);
             BufferedWriter bw = new BufferedWriter(fileWriter);
-            bw.newLine();
-            bw.write(telefoneString);
+            bw.write(telefoneString+"\n");
             bw.close();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public void escreverArquivoContatos(String contatoString) {
+    public void adicionarArquivoContatos(String contatoString) {
         criarArquivo(contatosTxt);
         try {
             FileWriter fileWriter = new FileWriter(contatosTxt, true);
             BufferedWriter bw = new BufferedWriter(fileWriter);
-            bw.newLine();
-            bw.write(contatoString);
+            bw.write(contatoString+"\n");
+            bw.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void atualizarContatos(List<Contato> contatos) {
+        try {
+            FileWriter fileWriter = new FileWriter(contatosTxt,false);
+            BufferedWriter bw = new BufferedWriter(fileWriter);
+            for (int i = 0; i < contatos.size(); i++) {
+                String contatoString = contatos.get(i).contatoFormatadoTxt();
+                bw.write(contatoString+"\n");
+            }
+            bw.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void atualizarTelefones(List<Contato> contatos) {
+        try {
+            FileWriter fileWriter = new FileWriter(telefonesTxt, false);
+            BufferedWriter bw = new BufferedWriter(fileWriter);
+            for (int i = 0; i < contatos.size(); i++) {
+                Contato contatoAtual = contatos.get(i);
+                List<Telefone> telefonesContatoAtual = contatoAtual.getTelefones();
+                for (int j = 0; j < telefonesContatoAtual.size(); j++) {
+                    String telefoneAtualString = String.format("%d|%s",contatoAtual.getId(),
+                            telefonesContatoAtual.get(j).telefoneFormatadoTxt());
+                    bw.write(telefoneAtualString+"\n");
+                }
+            }
             bw.close();
         } catch (IOException e) {
             throw new RuntimeException(e);
