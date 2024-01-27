@@ -33,7 +33,9 @@ public class Leitor {
             BufferedReader br = new BufferedReader(fileReader);
             String linha = br.readLine();
             while (linha != null) {
-                linhas.add(linha);
+                if (!linha.equals("")) {
+                    linhas.add(linha);
+                }
                 linha = br.readLine();
             }
             br.close();
